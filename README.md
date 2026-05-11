@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BAA 経営ダッシュボード
 
-## Getting Started
+BAA事業の月次受注目標に対する着地予測を可視化するダッシュボード。
 
-First, run the development server:
+## アーキテクチャ
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Frontend**: Next.js 16 (App Router) + React 19 + Tailwind CSS 4
+- **Backend**: Next.js API Routes
+- **Data Source**: Google Sheets (BAA営業データベース「BAA経営ダッシュボード」シート)
+- **Hosting**: Vercel
+- **Notification**: Slack DM (別途 `scripts/baa_dashboard_daily.py` で配信)
+
+## データフロー
+
+```
+Google Sheets (関数集計)
+  └── /api/kpi (Service Account)
+        └── /  (React + SWR・1分自動更新)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 開発
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+pnpm dev   # http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+ローカル開発時は `gws` CLI 経由で動作（環境変数不要）。
 
-## Learn More
+## 本番デプロイ（Vercel）
 
-To learn more about Next.js, take a look at the following resources:
+### 1. Service Account を作成
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. https://console.cloud.google.com/apis/credentials
+2. **CREATE CREDENTIALS** → **Service account**
+3. **Keys** → **ADD KEY** → JSON で `credentials.json` をダウンロード
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. スプシを Service Account にシェア
 
-## Deploy on Vercel
+対象スプシ:
+- ID: `1fJlu1Ky2rNS3GepLGH2PUajE88kNzk9eqWGMf4m53aI`
+- Service Accountのメアド（例: `xxx@xxx.iam.gserviceaccount.com`）を **閲覧者** として共有
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 3. Vercel環境変数に登録
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+base64 -i credentials.json | pbcopy
+vercel env add GOOGLE_SHEETS_CREDENTIALS_BASE64 production
+```
+
+### 4. デプロイ
+
+```bash
+vercel --prod
+```
+
+## 環境変数
+
+| 変数名 | 必須 | 説明 |
+|---|---|---|
+| `GOOGLE_SHEETS_CREDENTIALS_BASE64` | 本番のみ | Service Account credentialsをbase64化したもの |
