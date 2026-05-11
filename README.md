@@ -1,61 +1,72 @@
-# BAA 経営ダッシュボード
+# BAA経営ダッシュボード（静的HTML版）
 
-BAA事業の月次受注目標に対する着地予測を可視化するダッシュボード。
+スプシ「BAA経営ダッシュボード_LS」シートのKPIを静的HTML 1枚にレンダリングし、GitHub Pagesで公開するシンプル構成。
 
-## アーキテクチャ
-
-- **Frontend**: Next.js 16 (App Router) + React 19 + Tailwind CSS 4
-- **Backend**: Next.js API Routes
-- **Data Source**: Google Sheets (BAA営業データベース「BAA経営ダッシュボード」シート)
-- **Hosting**: Vercel
-- **Notification**: Slack DM (別途 `scripts/baa_dashboard_daily.py` で配信)
-
-## データフロー
+## 構成
 
 ```
-Google Sheets (関数集計)
-  └── /api/kpi (Service Account)
-        └── /  (React + SWR・1分自動更新)
+~/dev/baa-dashboard/
+├── docs/<RANDOM_PATH>/index.html  ← GitHub Pages公開対象（生成物）
+├── scripts/
+│   └── generate.py                ← スプシ → HTML 生成
+├── .url-path                      ← ランダムパス（.gitignore対象・秘密）
+├── .gitignore
+└── README.md
 ```
 
-## 開発
+## セキュリティ
+
+- リポは public（GitHub Pages無料プランの制約）
+- URLパスは `secrets.token_urlsafe(6)` で生成したランダム文字列（例: `dAapsw5z`）
+- 一般検索では発見困難。URLを知らない人はアクセス不可
+- メタタグ `noindex, nofollow` で検索エンジンクロール拒否
+
+## 公開URL
+
+`https://rikutootsuka-prog.github.io/baa-dashboard/<RANDOM_PATH>/`
+
+実際のRANDOM_PATHは `.url-path` ファイル内（push対象外）に保存。
+
+## 使い方
+
+### ローカル生成
 
 ```bash
-pnpm install
-pnpm dev   # http://localhost:3000
+python3 scripts/generate.py
 ```
 
-ローカル開発時は `gws` CLI 経由で動作（環境変数不要）。
+→ `docs/<RANDOM_PATH>/index.html` を生成。
 
-## 本番デプロイ（Vercel）
-
-### 1. Service Account を作成
-
-1. https://console.cloud.google.com/apis/credentials
-2. **CREATE CREDENTIALS** → **Service account**
-3. **Keys** → **ADD KEY** → JSON で `credentials.json` をダウンロード
-
-### 2. スプシを Service Account にシェア
-
-対象スプシ:
-- ID: `1fJlu1Ky2rNS3GepLGH2PUajE88kNzk9eqWGMf4m53aI`
-- Service Accountのメアド（例: `xxx@xxx.iam.gserviceaccount.com`）を **閲覧者** として共有
-
-### 3. Vercel環境変数に登録
+### 本番公開（push）
 
 ```bash
-base64 -i credentials.json | pbcopy
-vercel env add GOOGLE_SHEETS_CREDENTIALS_BASE64 production
+git add docs/
+git commit -m "chore: update dashboard"
+git push origin main
 ```
 
-### 4. デプロイ
+GitHub Pagesが自動デプロイ（数秒〜数十秒）。
 
-```bash
-vercel --prod
+### 更新頻度
+
+- HTML自体は手動 or cronで再生成
+- ブラウザ側で10分ごとに `<meta http-equiv="refresh">` で自動再読込
+
+## データソース
+
+- スプシID: `1fJlu1Ky2rNS3GepLGH2PUajE88kNzk9eqWGMf4m53aI`
+- シート: `BAA経営ダッシュボード_LS`（指標／値／単位／グループの4列構造化）
+- 取得: gws CLI（ローカル認証済み）
+
+## 自動更新（オプション）
+
+`crontab -e` に下記を追加すれば平日朝9時に自動再生成＆push：
+
+```cron
+0 9 * * 1-5 cd ~/dev/baa-dashboard && python3 scripts/generate.py && git add docs/ && git -c commit.gpgsign=false commit -m "chore: auto-update $(date +\%Y-\%m-\%d)" -q && git push origin main -q
 ```
 
-## 環境変数
+## Slack DM配信との関係
 
-| 変数名 | 必須 | 説明 |
-|---|---|---|
-| `GOOGLE_SHEETS_CREDENTIALS_BASE64` | 本番のみ | Service Account credentialsをbase64化したもの |
+別途 `~/.../BAA事業サポートスキル（共有）/scripts/baa_dashboard_daily.py` が平日朝にSlack DMでKPIサマリーを配信。
+ダッシュボードURLはそのDM内にリンクとして埋め込み可能。

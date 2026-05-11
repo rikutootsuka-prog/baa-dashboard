@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>BAA経営ダッシュボード</title>
+<meta http-equiv="refresh" content="600">
+<style>
+:root {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #1d4ed8;
+  --red: #dc2626;
+  --green: #16a34a;
+  --orange: #ea580c;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 24px 16px 48px;
+  line-height: 1.5;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+h1 { margin: 0; font-size: 24px; letter-spacing: 0.02em; }
+.meta { font-size: 12px; color: var(--muted); }
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 28px 0 12px;
+  letter-spacing: 0.08em;
+}
+.grid { display: grid; gap: 12px; }
+.grid-7 { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+.card, .card-big {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: transform 0.1s;
+}
+.card:hover, .card-big:hover { transform: translateY(-1px); }
+.card-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.card-value {
+  font-size: 32px;
+  font-weight: 700;
+  font-feature-settings: "tnum";
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.card-big .card-value { font-size: 44px; }
+.card-unit {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.card-red .card-value { color: var(--red); }
+.card-green .card-value { color: var(--green); }
+.card-orange .card-value { color: var(--orange); }
+.card-accent .card-value { color: var(--accent); }
+
+footer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+footer a { color: var(--accent); text-decoration: none; }
+
+@media (max-width: 480px) {
+  body { padding: 16px 12px 32px; }
+  h1 { font-size: 20px; }
+  .card-value { font-size: 26px; }
+  .card-big .card-value { font-size: 34px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>📊 BAA経営ダッシュボード</h1>
+    <div class="meta">最終更新: 2026-05-11 21:31（10分ごと自動再読込）</div>
+  </header>
+
+  <div class="section-title">月次概要</div>
+  <div class="grid grid-3">
+    <div class="card-big card-accent"><div class="card-label">🎯 受注目標</div><div class="card-value">35</div><div class="card-unit">件</div></div>
+    <div class="card-big card-red"><div class="card-label">🔥 残必要受注</div><div class="card-value">31</div><div class="card-unit">件</div></div>
+    <div class="card-big card-orange"><div class="card-label">📌 残必要アポ</div><div class="card-value">92</div><div class="card-unit">件</div></div>
+  </div>
+
+  <div class="section-title">営業数字共有（当月）</div>
+  <div class="grid grid-7">
+    <div class="card"><div class="card-label">📅 月内アポ</div><div class="card-value">20</div><div class="card-unit">件</div></div>
+    <div class="card card-green"><div class="card-label">✅ 受注</div><div class="card-value">0</div><div class="card-unit">件</div></div>
+    <div class="card"><div class="card-label">Bヨミ</div><div class="card-value">4</div><div class="card-unit">件</div></div>
+    <div class="card"><div class="card-label">Cヨミ+</div><div class="card-value">4</div><div class="card-unit">件</div></div>
+    <div class="card"><div class="card-label">Cヨミ−</div><div class="card-value">6</div><div class="card-unit">件</div></div>
+    <div class="card"><div class="card-label">Dヨミ</div><div class="card-value">0</div><div class="card-unit">件</div></div>
+    <div class="card"><div class="card-label">繰越</div><div class="card-value">12</div><div class="card-unit">件</div></div>
+  </div>
+
+  <div class="section-title">締切・注意</div>
+  <div class="grid grid-3">
+    <div class="card"><div class="card-label">⏰ アポ取得締切</div><div class="card-value">2026/05/25 (月)</div><div class="card-unit">-</div></div>
+    <div class="card card-orange"><div class="card-label">残営業日</div><div class="card-value">11</div><div class="card-unit">日</div></div>
+    <div class="card card-red"><div class="card-label">⚠️ フェーズ未判定</div><div class="card-value">17</div><div class="card-unit">件</div></div>
+  </div>
+
+  <footer>
+    Powered by Python + GitHub Pages
+  </footer>
+</div>
+</body>
+</html>
