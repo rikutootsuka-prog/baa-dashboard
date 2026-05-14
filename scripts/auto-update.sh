@@ -17,7 +17,8 @@ set -e
 cd "$(dirname "$0")/.."
 
 # PATH 補完（cron 実行時は環境変数が最小限）
-export PATH="/usr/local/bin:/usr/bin:/bin:/Users/ootsukarikuto/.nvm/versions/node/v22.17.0/bin:$PATH"
+# /opt/homebrew/bin は gh CLI (credential helper) のため必須
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/Users/ootsukarikuto/.nvm/versions/node/v22.17.0/bin:$PATH"
 
 echo "===== $(date '+%Y-%m-%d %H:%M:%S') ====="
 
