@@ -76,6 +76,12 @@ h1 { margin: 0; font-size: 24px; letter-spacing: 0.02em; }
   color: var(--muted);
   margin-top: 2px;
 }
+.card-note {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.35;
+}
 .card-red .card-value { color: var(--red); }
 .card-green .card-value { color: var(--green); }
 .card-orange .card-value { color: var(--orange); }
@@ -103,7 +109,7 @@ footer a { color: var(--accent); text-decoration: none; }
 <div class="container">
   <header>
     <h1>📊 BAA経営ダッシュボード</h1>
-    <div class="meta">最終更新: 2026-05-15 12:00（10分ごと自動再読込）</div>
+    <div class="meta">最終更新: 2026-05-15 12:03（10分ごと自動再読込）</div>
   </header>
 
   <div class="section-title">月次概要</div>
@@ -115,20 +121,14 @@ footer a { color: var(--accent); text-decoration: none; }
 
   <div class="section-title">営業数字共有（当月）</div>
   <div class="grid grid-7">
-    <div class="card"><div class="card-label">📅 月内アポ</div><div class="card-value">32</div><div class="card-unit">件</div></div>
+    <div class="card"><div class="card-label">📅 月内アポ（実施済）</div><div class="card-value">32</div><div class="card-unit">件</div><div class="card-note">今月すでに実施したアポ件数</div></div>
+    <div class="card card-accent"><div class="card-label">🗓 月内残アポ</div><div class="card-value">21</div><div class="card-unit">件</div><div class="card-note">今日以降〜月末に予定済のアポ件数</div></div>
     <div class="card card-green"><div class="card-label">✅ 受注</div><div class="card-value">3</div><div class="card-unit">件</div></div>
     <div class="card"><div class="card-label">Bヨミ</div><div class="card-value">6</div><div class="card-unit">件</div></div>
     <div class="card"><div class="card-label">Cヨミ+</div><div class="card-value">2</div><div class="card-unit">件</div></div>
     <div class="card"><div class="card-label">Cヨミ−</div><div class="card-value">8</div><div class="card-unit">件</div></div>
     <div class="card"><div class="card-label">Dヨミ</div><div class="card-value">0</div><div class="card-unit">件</div></div>
-    <div class="card"><div class="card-label">繰越</div><div class="card-value">12</div><div class="card-unit">件</div></div>
-  </div>
-
-  <div class="section-title">締切・注意</div>
-  <div class="grid grid-3">
-    <div class="card"><div class="card-label">⏰ アポ取得締切</div><div class="card-value">2026/05/25 (月)</div><div class="card-unit">-</div></div>
-    <div class="card card-orange"><div class="card-label">残営業日</div><div class="card-value">8</div><div class="card-unit">日</div></div>
-    <div class="card card-red"><div class="card-label">⚠️ フェーズ未判定</div><div class="card-value">18</div><div class="card-unit">件</div></div>
+    <div class="card"><div class="card-label">繰越</div><div class="card-value">12</div><div class="card-unit">件</div><div class="card-note">前月以前にアポ実施・今月着地ヨミの件数</div></div>
   </div>
 
   <footer>

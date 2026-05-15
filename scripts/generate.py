@@ -61,17 +61,19 @@ def parse_kpis(rows: list[list[str]]) -> dict[str, dict]:
 def render_html(kpis: dict[str, dict]) -> str:
     now = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M")
 
-    def card(key: str, label: str, *, big: bool = False, color: str = "default") -> str:
+    def card(key: str, label: str, *, big: bool = False, color: str = "default", note: str = "") -> str:
         k = kpis.get(key)
         if not k:
             return f'<div class="card">{label}: -</div>'
         size_class = "card-big" if big else "card"
         color_class = f" card-{color}" if color != "default" else ""
+        note_html = f'<div class="card-note">{note}</div>' if note else ""
         return (
             f'<div class="{size_class}{color_class}">'
             f'<div class="card-label">{label}</div>'
             f'<div class="card-value">{k["value"]}</div>'
             f'<div class="card-unit">{k["unit"]}</div>'
+            f"{note_html}"
             f"</div>"
         )
 
@@ -153,6 +155,12 @@ h1 {{ margin: 0; font-size: 24px; letter-spacing: 0.02em; }}
   color: var(--muted);
   margin-top: 2px;
 }}
+.card-note {{
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.35;
+}}
 .card-red .card-value {{ color: var(--red); }}
 .card-green .card-value {{ color: var(--green); }}
 .card-orange .card-value {{ color: var(--orange); }}
@@ -192,20 +200,14 @@ footer a {{ color: var(--accent); text-decoration: none; }}
 
   <div class="section-title">営業数字共有（当月）</div>
   <div class="grid grid-7">
-    {card("月内アポ実施数", "📅 月内アポ")}
+    {card("月内アポ実施数", "📅 月内アポ（実施済）", note="今月すでに実施したアポ件数")}
+    {card("月内残アポ", "🗓 月内残アポ", color="accent", note="今日以降〜月末に予定済のアポ件数")}
     {card("当月受注数 (Jヨミ)", "✅ 受注", color="green")}
     {card("Bヨミ", "Bヨミ")}
     {card("Cヨミ+", "Cヨミ+")}
     {card("Cヨミ−", "Cヨミ−")}
     {card("Dヨミ", "Dヨミ")}
-    {card("繰越数", "繰越")}
-  </div>
-
-  <div class="section-title">締切・注意</div>
-  <div class="grid grid-3">
-    {card("アポ取得締切", "⏰ アポ取得締切")}
-    {card("締切まで残営業日", "残営業日", color="orange")}
-    {card("当月フェーズ未判定件数", "⚠️ フェーズ未判定", color="red")}
+    {card("繰越数", "繰越", note="前月以前にアポ実施・今月着地ヨミの件数")}
   </div>
 
   <footer>
