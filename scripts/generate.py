@@ -194,20 +194,21 @@ footer a {{ color: var(--accent); text-decoration: none; }}
   <div class="section-title">月次概要</div>
   <div class="grid grid-3">
     {card("受注社数目標", "🎯 受注目標", big=True, color="accent")}
-    {card("実質残必要受注", "🔥 残必要受注", big=True, color="red")}
+    {card("受注数ギャップ", "⚡ 受注ギャップ", big=True, color="red", note="目標 − (Jヨミ + Bヨミ)")}
     {card("標準 残必要アポ", "📌 残必要アポ", big=True, color="orange")}
   </div>
 
   <div class="section-title">営業数字共有（当月）</div>
   <div class="grid grid-7">
-    {card("月内アポ実施数", "📅 月内アポ（実施済）", note="今月すでに実施したアポ件数")}
+    {card("月内アポ合計", "📅 月内アポ合計", note="実施済 + 残予定")}
+    {card("月内アポ実施済", "✔️ 実施済", note="本日までに実施したアポ件数")}
     {card("月内残アポ", "🗓 月内残アポ", color="accent", note="今日以降〜月末に予定済のアポ件数")}
     {card("当月受注数 (Jヨミ)", "✅ 受注", color="green")}
+    {card("受注率", "📈 受注率", color="green", note="(受注+Bヨミ)÷アポ実施数")}
     {card("Bヨミ", "Bヨミ")}
     {card("Cヨミ+", "Cヨミ+")}
     {card("Cヨミ−", "Cヨミ−")}
     {card("Dヨミ", "Dヨミ")}
-    {card("繰越数", "繰越", note="前月以前にアポ実施・今月着地ヨミの件数")}
   </div>
 
   <footer>
