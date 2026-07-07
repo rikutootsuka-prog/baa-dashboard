@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GWS_CLI = "/Users/ootsukarikuto/.nvm/versions/node/v22.17.0/bin/gws"
 SHEET_ID = "1fJlu1Ky2rNS3GepLGH2PUajE88kNzk9eqWGMf4m53aI"
 SHEET_NAME = "BAA経営ダッシュボード_LS"
-RANGE = f"{SHEET_NAME}!A1:D20"
+RANGE = f"{SHEET_NAME}!A1:D30"
 
 
 def read_url_path() -> str:
@@ -56,6 +56,11 @@ def parse_kpis(rows: list[list[str]]) -> dict[str, dict]:
         group = row[3] if len(row) > 3 else ""
         kpis[name] = {"value": value, "unit": unit, "group": group}
     return kpis
+
+
+def g_val(kpis: dict, key: str, default: str = "-") -> str:
+    k = kpis.get(key)
+    return str(k["value"]) if k else default
 
 
 def render_html(kpis: dict[str, dict]) -> str:
@@ -191,11 +196,18 @@ footer a {{ color: var(--accent); text-decoration: none; }}
     <div class="meta">最終更新: {now}（10分ごと自動再読込）</div>
   </header>
 
-  <div class="section-title">月次概要</div>
+  <div class="section-title">5期トラッキング（受注27社必達・7-12月）</div>
   <div class="grid grid-3">
-    {card("受注社数目標", "🎯 受注目標", big=True, color="accent")}
-    {card("受注数ギャップ", "⚡ 受注ギャップ", big=True, color="red", note="目標 − (Jヨミ + Bヨミ)")}
-    {card("標準 残必要アポ", "📌 残必要アポ", big=True, color="orange")}
+    {card("5期受注累計", "🏁 5期受注累計", big=True, color="green", note=f"目標 {g_val(kpis, "5期受注目標", "27")}社（7-12月）")}
+    {card("在庫の期待受注", "📦 在庫の期待受注", big=True, color="accent", note=f"ヨミ在庫×確度の期待値。目標27との差 {g_val(kpis, "5期差分")}社")}
+    {card("必要な新規アポ", "🔥 必要な新規アポ", big=True, color="red", note=f"残り件数。月{g_val(kpis, "月あたり必要アポ")}件ペースで積む")}
+  </div>
+
+  <div class="section-title">月次概要（当月）</div>
+  <div class="grid grid-3">
+    {card("受注社数目標", "🎯 当月受注目標", big=True, color="accent", note="5期27社の月別配分")}
+    {card("受注数ギャップ", "⚡ 当月受注ギャップ", big=True, color="red", note="当月目標 − (Jヨミ + Bヨミ)")}
+    {card("標準 残必要アポ", "📌 当月残必要アポ", big=True, color="orange", note="当月分のみ。5期全体は上段「必要な新規アポ」を見る")}
   </div>
 
   <div class="section-title">営業数字共有（当月）</div>
