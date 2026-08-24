@@ -249,6 +249,7 @@ footer a {{ color: var(--accent); text-decoration: none; }}
       {card("Cヨミ−", "Cヨミ−")}
       {card("Dヨミ", "Dヨミ")}
       {card("当月フェーズ未判定件数", "⚠️ フェーズ未判定", color="orange", note="要入力催促")}
+      {card("受注日未入力のJヨミ", "🚨 受注日未入力", color="red", note="2026/9分以降はどの月にも計上されない。0件を維持")}
     </div>
 
     <div class="section-title">着地デッドライン</div>
