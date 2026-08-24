@@ -132,6 +132,19 @@ h1 {{ margin: 0; font-size: 24px; letter-spacing: 0.02em; }}
 .grid {{ display: grid; gap: 12px; }}
 .grid-7 {{ grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }}
 .grid-3 {{ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }}
+.grid-2 {{ grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }}
+details {{ margin-top: 32px; }}
+details > summary {{
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  letter-spacing: 0.04em;
+}}
+details[open] > summary {{ margin-bottom: 8px; }}
+.hero .card-value {{ font-size: 52px; }}
 
 .card, .card-big {{
   background: var(--panel);
@@ -196,34 +209,57 @@ footer a {{ color: var(--accent); text-decoration: none; }}
     <div class="meta">最終更新: {now}（10分ごと自動再読込）</div>
   </header>
 
-  <div class="section-title">5期トラッキング（受注27社必達・7-12月）</div>
-  <div class="grid grid-3">
-    {card("5期受注累計", "🏁 5期受注累計", big=True, color="green", note=f"目標 {g_val(kpis, "5期受注目標", "27")}社（7-12月）")}
-    {card("在庫の期待受注", "📦 在庫の期待受注", big=True, color="accent", note=f"ヨミ在庫×確度の期待値。目標27との差 {g_val(kpis, "5期差分")}社")}
-    {card("必要な新規アポ", "🔥 必要な新規アポ", big=True, color="red", note=f"残り件数。月{g_val(kpis, "月あたり必要アポ")}件ペースで積む")}
+  <div class="section-title">当月（{g_val(kpis, "当月締め窓", "-")}）</div>
+  <div class="grid grid-2">
+    {card("受注社数目標", "🎯 当月 受注目標", big=True, color="accent")}
+    {card("当月受注数 (Jヨミ)", "✅ 当月 受注数", big=True, color="green", note="Jヨミ（受注確定）")}
   </div>
 
-  <div class="section-title">月次概要（当月）</div>
-  <div class="grid grid-3">
-    {card("受注社数目標", "🎯 当月受注目標", big=True, color="accent", note="5期27社の月別配分")}
-    {card("受注数ギャップ", "⚡ 当月受注ギャップ", big=True, color="red", note="当月目標 − (Jヨミ + Bヨミ)")}
-    {card("標準 残必要アポ", "📌 当月残必要アポ", big=True, color="orange", note="当月分のみ。5期全体は上段「必要な新規アポ」を見る")}
+  <div class="section-title">当四半期（{g_val(kpis, "当Qラベル", "Q")}）</div>
+  <div class="grid grid-2">
+    {card("当Q受注目標", "🎯 当Q 受注目標", big=True, color="accent")}
+    {card("当Q受注数", "✅ 当Q 受注数", big=True, color="green")}
   </div>
 
-  <div class="section-title">営業数字共有（当月）</div>
-  <div class="grid grid-7">
-    {card("月内アポ合計", "📅 月内アポ合計", note="実施済 + 残予定")}
-    {card("月内アポ実施済", "✔️ 実施済", note="本日までに実施したアポ件数")}
-    {card("月内残アポ", "🗓 月内残アポ", color="accent", note="今日以降〜月末に予定済のアポ件数")}
-    {card("当月受注数 (Jヨミ)", "✅ 受注", color="green")}
-    {card("受注率", "📈 受注率", color="green", note="(受注+Bヨミ)÷アポ実施数")}
-    {card("Bヨミ", "Bヨミ")}
-    {card("Cヨミ+", "Cヨミ+")}
-    {card("Cヨミ−", "Cヨミ−")}
-    {card("Dヨミ", "Dヨミ")}
-  </div>
+  <details>
+    <summary>詳細指標（営業運用用）</summary>
+
+    <div class="section-title">5期トラッキング（月27社・7-12月162社）</div>
+    <div class="grid grid-3">
+      {card("5期受注累計", "🏁 5期受注累計", note=f"目標 {g_val(kpis, "5期受注目標", "162")}社（7-12月）")}
+      {card("在庫の期待受注", "📦 在庫の期待受注", note=f"ヨミ在庫×確度の期待値。目標との差 {g_val(kpis, "5期差分")}社（既受注控除後）")}
+      {card("必要な新規アポ", "🔥 必要な新規アポ", color="red", note=f"残り件数。月{g_val(kpis, "月あたり必要アポ")}件ペースで積む")}
+    </div>
+
+    <div class="section-title">月次概要（当月）</div>
+    <div class="grid grid-3">
+      {card("受注数ギャップ", "⚡ 当月受注ギャップ", color="red", note="当月目標 − (Jヨミ + Bヨミ)")}
+      {card("進捗率", "📊 進捗率", note="(Jヨミ + Bヨミ) ÷ 当月目標")}
+      {card("標準 残必要アポ", "📌 当月残必要アポ", color="orange", note="想定受注率29.5%・4期実測")}
+    </div>
+
+    <div class="section-title">営業数字共有（当月）</div>
+    <div class="grid grid-7">
+      {card("月内アポ合計", "📅 月内アポ合計", note="実施済 + 残予定")}
+      {card("月内アポ実施済", "✔️ 実施済", note="本日までに実施したアポ件数")}
+      {card("月内残アポ", "🗓 月内残アポ", color="accent", note="今日以降〜月末に予定済のアポ件数")}
+      {card("受注率", "📈 受注率", color="green", note="(受注+Bヨミ)÷アポ実施数")}
+      {card("Bヨミ", "Bヨミ")}
+      {card("Cヨミ+", "Cヨミ+")}
+      {card("Cヨミ−", "Cヨミ−")}
+      {card("Dヨミ", "Dヨミ")}
+      {card("当月フェーズ未判定件数", "⚠️ フェーズ未判定", color="orange", note="要入力催促")}
+    </div>
+
+    <div class="section-title">着地デッドライン</div>
+    <div class="grid grid-3">
+      {card("アポ取得締切", "⏳ アポ取得締切")}
+      {card("締切まで残営業日", "📆 締切まで残営業日")}
+    </div>
+  </details>
 
   <footer>
+    受注社数のカウント：2026年9月分から20日締め（前月21日〜当月20日・受注日ベース）／8月分までは月内まるまる<br>
     Powered by Python + GitHub Pages
   </footer>
 </div>
