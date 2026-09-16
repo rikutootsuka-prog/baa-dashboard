@@ -52,7 +52,7 @@ def build_message(kpis: dict) -> str:
 • 受注目標: {q_target}社
 • 受注数: {q_actual}社{pct(q_actual, q_target)}
 
-:link: 詳細（残アポ・ヨミ内訳など）: {DASHBOARD_URL}
+:link: 詳細（残アポ・ヨミ内訳など）: <{DASHBOARD_URL}|ダッシュボードを開く>
 _受注社数のカウントは2026年9月分から20日締め（前月21日〜当月20日）。8月分までは月内まるまる。_"""
 
 
